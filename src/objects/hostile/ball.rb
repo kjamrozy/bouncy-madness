@@ -29,6 +29,7 @@ class Ball
     @img.draw(@x, @y, 1, x_scale, y_scale)
   end
 
+  # current ball splits into two smaller balls
   def pop
     return true unless @r > @vsize
 

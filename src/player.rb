@@ -2,7 +2,8 @@ require_relative 'objects/projectiles/whirl_projectile'
 
 # player class
 class Player
-  attr_accessor :mov
+  attr_reader :img
+  attr_accessor :mov, :cooldown
 
   def initialize(scene, x, y, params = {})
     @scene = scene
@@ -13,14 +14,11 @@ class Player
     @mov = 0
     @velocity = params[:velocity] || 0.2
     @scale = params[:scale] || 1.0
-
     # point at time when player would be allowed to use weapon again
     @cooldown = Time.now - 1
     @projectile = WhirlProjectile
 
     @img = Gosu::Image.new('media/images/character.png')
-    @width = 40
-    @height = 80
   end
 
   def draw
@@ -37,7 +35,7 @@ class Player
   end
 
   def shot
-    projectile = @projectile.new(@scene, @x, @y)
+    projectile = @projectile.new(@scene, x: @x, y: @y)
     @scene.add_object(projectile)
     @cooldown = Time.now + 1
   end

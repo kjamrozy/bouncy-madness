@@ -1,11 +1,11 @@
-# main projectile class
-class Projectile
-  def initialize(scene, x, y, params = {})
-    @scene = scene
-    @x = x
-    @y = y
+require_relative '../../helpers/object_helper'
+require_relative '../base_object'
 
-    @scale = params[:scale] || 1.0
+# main projectile class, it is not meant to instantiate
+class Projectile < BaseObject
+  include ObjectHelper
+  def initialize(scene, params = {})
+    super(scene, params)
     @vy = params[:y_velocity] || 0.5
   end
 

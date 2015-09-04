@@ -12,4 +12,8 @@ class Projectile < BaseObject
   def update(interval)
     @y = [@y - interval * @vy, 0].max
   end
+
+  def cooldown
+    1
+  end
 end

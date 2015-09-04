@@ -21,6 +21,7 @@ class Ball < BaseObject
 
   # current ball splits into two smaller balls
   def pop
+    @scene.score += 1
     @keep = false
     return unless @r > @vsize
 

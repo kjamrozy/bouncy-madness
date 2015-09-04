@@ -9,8 +9,8 @@ class WhirlProjectile < Projectile
     @rot_speed = params[:rot_speed] || 0.002
 
     @img = Gosu::Image.new('media/images/whirl_projectile.png')
-    @x -= [(@img.width - @scene.player.img.width) / 2, 0].max
-    @y -= [@img.width, 0].max
+    @x = params[:x] || scene.player.img.width/2 + scene.player.x - @img.width/2
+    @y = params[:y] || [scene.height - @img.height - scene.player.img.height, 0].max
   end
 
   def draw

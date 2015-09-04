@@ -1,14 +1,14 @@
 require_relative 'objects/projectiles/whirl_projectile'
+require_relative 'helpers/object_helper'
 
 # player class
 class Player
-  attr_reader :img
+  include ObjectHelper
+  attr_reader :img, :x, :y
   attr_accessor :mov, :cooldown
 
-  def initialize(scene, x, y, params = {})
+  def initialize(scene, params = {})
     @scene = scene
-    @x = x
-    @y = y
     # movement variable, -1 for moving to the left,
     # 0 to not move at all, 1 to move to the right
     @mov = 0
@@ -19,6 +19,8 @@ class Player
     @projectile = WhirlProjectile
 
     @img = Gosu::Image.new('media/images/character.png')
+    @x = params[:x] || Integer(@scene.width/2 - @img.width/2)
+    @y = params[:y] || @scene.height - @img.height
   end
 
   def draw
@@ -26,6 +28,9 @@ class Player
   end
 
   def update(interval)
+    @mov = 0
+    @mov = -1 if Gosu.button_down? Gosu::KbLeft
+    @mov = 1 if Gosu.button_down? Gosu::KbRight
     @x += interval * @velocity * @mov
   end
 
@@ -35,8 +40,8 @@ class Player
   end
 
   def shot
-    projectile = @projectile.new(@scene, x: @x, y: @y)
+    projectile = @projectile.new(@scene)
     @scene.add_object(projectile)
-    @cooldown = Time.now + 1
+    @cooldown = Time.now + projectile.cooldown
   end
 end

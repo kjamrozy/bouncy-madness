@@ -1,16 +1,16 @@
 require 'gosu'
-require_relative 'game_scene'
+require_relative 'menu_scene'
 
 # game window
 class Game < Gosu::Window
   attr_accessor :cursor
+  attr_accessor :scene
   def initialize
     super(800, 600)
-    self.caption = 'Bouncy madness'
-    @scene = GameScene.new(self)
-    @x = @y = 300
-    @r = 50
-    @cursor = false
+    self.caption = 'BOUNCY MADNESS'
+
+    @scene = MenuScene.new(self)
+    @cursor = true
   end
 
   def draw

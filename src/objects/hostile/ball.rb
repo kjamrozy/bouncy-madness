@@ -16,7 +16,8 @@ class Ball < BaseObject
     # boundaries of screen
     @max_y = params[:max_y] || @scene.height - 2 * @r
     @max_x = params[:max_x] || @scene.width - 2 * @r
-    @color = Gosu::Color.rgba(Integer(255 * rand), Integer(255 * rand), Integer(255 * rand), 255)
+    @color = Gosu::Color.rgba(
+      Integer(255 * rand), Integer(255 * rand), Integer(255 * rand), 255)
   end
 
   # current ball splits into two smaller balls

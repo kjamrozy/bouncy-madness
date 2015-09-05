@@ -80,7 +80,7 @@ class GameScene
   end
 
   def player_collision(ball)
-    return true unless boxes_intersect?(@player.cbox, ball.cbox)
+    return true unless @player.cbox.any? { |cbox| boxes_intersect?(cbox, ball.cbox) }
     @state = 'GAME_OVER'
   end
 

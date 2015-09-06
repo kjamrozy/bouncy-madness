@@ -32,4 +32,8 @@ class WhirlProjectile < Projectile
     offset = Integer(@img.width * 0.05)
     [@x + offset, @x + offset + width, @y + offset, @y + offset + width]
   end
+
+  def cooldown
+    200
+  end
 end

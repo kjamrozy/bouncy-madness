@@ -7,6 +7,7 @@ class Projectile < BaseObject
   def initialize(scene, params = {})
     super(scene, params)
     @vy = params[:y_velocity] || 0.5
+    @z = PROJECTILE
   end
 
   def update(interval)
@@ -14,6 +15,6 @@ class Projectile < BaseObject
   end
 
   def cooldown
-    1
+    1000
   end
 end

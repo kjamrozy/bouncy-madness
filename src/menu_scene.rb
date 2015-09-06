@@ -1,8 +1,10 @@
 require_relative 'objects/ui/button'
 require_relative 'game_scene'
- require_relative 'bouncy_letter'
+require_relative 'bouncy_letter'
+require_relative 'game_constants'
 # main menu screen
 class MenuScene
+  include GameConstants
   attr_reader :window
   def initialize(context)
     @window = context
@@ -17,7 +19,7 @@ class MenuScene
   end
 
   def draw
-    @background.draw(0, 0, -1)
+    @background.draw(0, 0, BACKGROUND)
     draw_btns
     draw_title
   end
@@ -52,9 +54,11 @@ class MenuScene
 
   def load_assets
     @background ||= Gosu::Image.new('media/images/main_background.png')
-    @letters ||= 'BOUNCY MADNESS'.split('').each.with_index
-      .collect { |l, i| BouncyLetter.new(self, l, 25 + 50 * i, 100, 100) }
-    @underscores ||= (['_'] * 14).each.with_index
-      .collect { |l, i| TitleLetter.new(self, l, 25 + 50 * i, 100, 100) }
+    @letters ||= 'BOUNCY MADNESS'.split('').each.with_index.collect  do |l, i|
+      BouncyLetter.new(self, l, 25 + 50 * i, 100, 100)
+    end
+    @underscores ||= (['_'] * 14).each.with_index.collect do |l, i|
+      TitleLetter.new(self, l, 25 + 50 * i, 100, 100)
+    end
   end
 end

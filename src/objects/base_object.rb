@@ -1,5 +1,10 @@
+require_relative '../helpers/object_helper'
+require_relative '../game_constants'
+
 # base object class, not meant to be instantized
 class BaseObject
+  include ObjectHelper
+  include GameConstants
   attr_accessor :keep
   def initialize(scene, params = {})
     @scene = scene

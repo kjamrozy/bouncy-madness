@@ -1,4 +1,8 @@
+require_relative '../../game_constants'
+
+# button class
 class Button
+  include GameConstants
   NORMAL = 0
   HOVER = 1
   DOWN = 2
@@ -11,7 +15,7 @@ class Button
     @y1 = y.to_i
     @x2 = (x + width).to_i
     @y2 = (y + height).to_i
-    @z = 11
+    @z = HUD
 
     @on_click = []
     @state = NORMAL

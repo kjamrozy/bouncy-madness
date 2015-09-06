@@ -1,14 +1,16 @@
 require_relative 'objects/ui/button'
+require_relative 'game_constants'
 
 # UI class
 class UI
+  include GameConstants
   def initialize(scene)
     @scene = scene
-    @z = 10
+    @z = HUD
 
     @last_score = 0
-    @elapsed = 0
-    @fps = 0
+    @last_updated = Gosu.milliseconds
+    @fps = 60
 
     load_fps_img
     load_score_img
@@ -33,16 +35,22 @@ class UI
   end
 
   def load_powerups_imgs
-    @powerups_imgs = (['whirl'] * 10).collect { |name| load_powerup_imgs(name) }
+    names = ['line','whirl'] + (['placeholder'] * 7) + ['freeze']
+    @powerups_imgs = names.collect { |name| load_powerup_imgs(name) }
   end
 
   def draw
-    @fps += 1
+    draw_counter if @scene.frozen?
     pause_notice if @scene.state == 'PAUSE'
     game_over if @scene.state == 'GAME_OVER'
     show_score
     show_fps
     show_powerup_slots
+  end
+
+  def draw_counter
+    Gosu.draw_rect(715, 150, 80, 45, Gosu::Color.rgba(100, 100, 255, 50), 15)
+    @counter_img.draw(715, 150, HUD)
   end
 
   def draw_window(x, y, x1, x2, y1, y2, img, params = {})
@@ -82,6 +90,11 @@ class UI
     @yes_button.draw
   end
 
+  def load_counter(time)
+    left = format('%.2f', (@scene.frozen - time) / 1000.0)
+    @counter_img = Gosu::Image.from_text(left.to_s, 50, align: :center)
+  end
+
   # loads game over buttons
   def load_gm_btns
     @no_button ||= Button.new(
@@ -103,16 +116,20 @@ class UI
     10.times do |i|
       x = @scene.width * 0.01 + i * @scene.width * 0.07
       y = @scene.width * 0.01
-      draw_powerup_slot(x, y, @powerups_imgs[i][1], img_color: Gosu::Color.rgba(255, 255, 255, 100))
+      j = @scene.player.powerups[i] ? 1 : 0
+      draw_powerup_slot(x, y, @powerups_imgs[i][j], img_color: Gosu::Color.rgba(255, 255, 255, 100))
       @numbers[i].draw(
         @scene.width * 0.025 + i * @scene.width * 0.07 , @scene.width * 0.015, @z,
         1.0, 1.0, Gosu::Color::BLACK)
     end
   end
 
-  def update(interval)
-    @elapsed += interval
-    load_fps_img && (@fps = 0) && (@elapsed = 0) if @elapsed >= 1000
+  def update(time)
+    interval = time - @last_updated
+    @last_updated = time
+
+    load_counter(time) if @scene.frozen?
+    load_fps_img unless @fps == Gosu.fps
     (@last_score = @scene.score) && load_score_img if @scene.score != @last_score
     if @scene.state == 'GAME_OVER'
       @no_button && @no_button.update
@@ -121,8 +138,9 @@ class UI
   end
 
   def load_fps_img
+    @fps = Gosu.fps
     @fps_img = Gosu::Image.from_text(
-      'FPS: ' + @fps.to_s, Integer(@scene.height * 0.03),
+      'FPS: ' + Gosu.fps.to_s, Integer(@scene.height * 0.03),
       align: :center, width: Integer(@scene.width * 0.07))
   end
 

@@ -1,10 +1,14 @@
 require_relative 'objects/projectiles/whirl_projectile'
+require_relative 'objects/projectiles/line_projectile'
 require_relative 'helpers/object_helper'
+require_relative 'game_constants'
+require 'gosu'
 
 # player class
 class Player
+  include GameConstants
   attr_reader :img, :x, :y
-  attr_accessor :mov, :cooldown
+  attr_accessor :mov, :cooldown, :powerups, :projectile, :powerups
 
   def initialize(scene, params = {})
     @scene = scene
@@ -14,9 +18,11 @@ class Player
     @velocity = params[:velocity] || 0.2
     @scale = params[:scale] || 1.0
     # point at time when player would be allowed to use weapon again
-    @cooldown = Time.now - 1
+    @cooldown = Gosu.milliseconds - 1
     @projectile = WhirlProjectile
 
+    @powerups = [false] * 10
+    @powerups[0] = LinePowerup.new(@scene)
     @imgs = Gosu::Image.load_tiles('media/images/character.png', 89, 120)
     @img = @imgs[0]
     @elapsed = 0
@@ -26,7 +32,7 @@ class Player
   end
 
   def draw
-    @img.draw(@x, @y, 1, @scale, @scale)
+    @img.draw(@x, @y, PLAYER, @scale, @scale)
   end
 
   def update(interval)
@@ -48,13 +54,13 @@ class Player
 
   # is cooldown on weapon off
   def cooldown?
-    Time.now >= @cooldown
+    Gosu.milliseconds >= @cooldown
   end
 
   def shot
     projectile = @projectile.new(@scene)
     @scene.add_object(projectile)
-    @cooldown = Time.now + projectile.cooldown
+    @cooldown = Gosu.milliseconds + projectile.cooldown
   end
 
   # collision boxes

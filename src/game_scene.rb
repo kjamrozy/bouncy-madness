@@ -3,15 +3,21 @@ require_relative 'ui'
 require_relative 'objects/hostile/ball'
 require_relative 'objects/projectiles/projectile'
 require_relative 'objects/debug/shadow'
+require_relative 'objects/powerups/powerups'
+require_relative 'game_constants'
 
 # GameScene class is in charge of holding objects which appear on the screen
 class GameScene
-  attr_reader :objects, :player, :width, :height, :state, :window
+  include GameConstants
+  attr_reader :objects, :player, :width, :height,
+              :state, :window, :frozen
   attr_accessor :score
   def initialize(context)
     @window = context
     @width = @window.width
     @height = @window.height
+    #special var for checking if balls should move
+    @frozen = Gosu.milliseconds - 1
 
     new_game
     
@@ -25,24 +31,33 @@ class GameScene
     @objects = []
 
     @score = 0
+    @last_update = Gosu.milliseconds
     @count_of = Hash.new(0)
     @state = 'ACTIVE'
   end
 
   def draw
-    @background.draw(0, 0, -1)
+    @background.draw(0, 0, BACKGROUND)
     @objects.each(&:draw)
     @player.draw
     @ui.draw
   end
 
   def update(interval)
+    seconds = Gosu.milliseconds
+    interval = seconds - @last_update
+    @last_update = seconds
+
     exit if Gosu.button_down? Gosu::KbEscape
-    @ui.update(interval)
+    10.times do |i|
+      next unless Gosu.button_down?(Gosu::Kb1+i) && @player.powerups[i]
+      @player.powerups[i].invoke
+    end
 
     @state = 'PAUSE' if Gosu.button_down? Gosu::KbP
     @state = 'ACTIVE' if (Gosu.button_down?(Gosu::KbEnter) || Gosu.button_down?(Gosu::KbReturn)) && @state == 'PAUSE'
 
+    @ui.update(seconds)
     return unless @state == 'ACTIVE'
 
     @objects.each { |obj| obj.keep? && collisions(obj) }
@@ -68,15 +83,24 @@ class GameScene
     @objects.push(obj)
   end
 
-  def collisions(obj1)
-    return projectile_collisions(obj1) if obj1.is_a?(Projectile) && obj1.keep?
-    return unless obj1.is_a?(Ball) && obj1.keep?
-    player_collision(obj1)
-    balls_collisions(obj1)
-  end
-
   def balls_collisions(ball1)
     # not yet implemented(if ever)
+  end
+
+  def collisions(obj)
+    return projectile_collisions(obj) if obj.is_a?(Projectile) && obj.keep?
+    return powerup_collision(obj) if obj.is_a?(Powerup)
+    return unless obj.is_a?(Ball) && obj.keep?
+    player_collision(obj)
+    balls_collisions(obj)
+  end
+
+  def freeze(time)
+    @frozen = Gosu.milliseconds + time
+  end
+
+  def frozen?
+    @frozen >= Gosu.milliseconds
   end
 
   def player_collision(ball)
@@ -90,11 +114,17 @@ class GameScene
       next unless obj.is_a?(Ball) && boxes_intersect?(proj.cbox, obj.cbox)
       obj.pop
       get_rid_of(proj, obj)
-      @player.cooldown = Time.now + 0.1 # reset cooldown as a bonus
+      @player.cooldown = Gosu.milliseconds + 100 # reset cooldown as a bonus
       # add_object(Shadow.new(obj1.cbox))
       # add_object(Shadow.new(obj2.cbox))
       break
     end
+  end
+
+  def powerup_collision(pow)
+    return unless @player.cbox.any? { |b| boxes_intersect?(b, pow.cbox) }
+    @player.powerups[pow.id] = pow
+    pow.keep = false
   end
 
   def boxes_intersect?(b1, b2) # [x1, x2, y1, y2]

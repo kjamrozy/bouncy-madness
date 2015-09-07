@@ -1,16 +1,16 @@
 require_relative 'powerup'
 
 # freezes balls for 3 seconds
-class FreezePowerup < Powerup
+class RainbowPowerup < Powerup
   def initialize(scene, params = {})
     super(scene, params)
-    @img = Gosu::Image.new('media/images/freeze_powerup.png')
+    @img = Gosu::Image.new('media/images/rainbow_powerup.png')
     @max_y = @scene.height - @img.height
-    @id = 9
+    @id = 7
   end
 
   def invoke
-    @scene.freeze(3000)
+    @scene.player.rainbow = 6000 
     @scene.player.powerups[@id] = nil
   end
 end

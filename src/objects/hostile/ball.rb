@@ -54,7 +54,7 @@ class Ball < BaseObject
   end
 
   def random_powerup
-    [WhirlPowerup, FreezePowerup].sample
+    [WhirlPowerup, FreezePowerup, ShieldPowerup, RainbowPowerup].sample
   end
 
 end

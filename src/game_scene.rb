@@ -104,7 +104,10 @@ class GameScene
   end
 
   def player_collision(ball)
-    return true unless @player.cbox.any? { |cbox| boxes_intersect?(cbox, ball.cbox) }
+    return if @player.rainbow > 0
+    return unless @player.cbox.any? { |cbox| boxes_intersect?(cbox, ball.cbox) }
+    @player.shield = 255 if @player.shield > 255
+    return if @player.shield > 0
     @state = 'GAME_OVER'
   end
 

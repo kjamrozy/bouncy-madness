@@ -35,7 +35,7 @@ class UI
   end
 
   def load_powerups_imgs
-    names = ['line','whirl'] + (['placeholder'] * 7) + ['freeze']
+    names = ['line','whirl'] + (['placeholder'] * 5) + ['rainbow', 'shield', 'freeze']
     @powerups_imgs = names.collect { |name| load_powerup_imgs(name) }
   end
 

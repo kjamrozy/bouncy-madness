@@ -1,9 +1,10 @@
 require_relative 'objects/ui/button'
 require_relative 'game_constants'
 
-# UI class
+# Odpowiada za hud i ekran pauzy.
 class UI
   include GameConstants
+  # Inicjuje interfejs
   def initialize(scene)
     @scene = scene
     @z = HUD
@@ -29,16 +30,19 @@ class UI
       end
   end
 
+  # Ładuje obrazek powerupu
   def load_powerup_imgs(name)
     [Gosu::Image.new("media/images/#{name}_powerup_disabled.png"),
      Gosu::Image.new("media/images/#{name}_powerup.png")]
   end
 
+  # Ładuje obrazki powerupów
   def load_powerups_imgs
     names = ['line','whirl'] + (['placeholder'] * 5) + ['rainbow', 'shield', 'freeze']
     @powerups_imgs = names.collect { |name| load_powerup_imgs(name) }
   end
 
+  # Rysuje intefejs
   def draw
     draw_counter if @scene.frozen?
     pause_notice if @scene.state == 'PAUSE'
@@ -48,11 +52,13 @@ class UI
     show_powerup_slots
   end
 
+  # Rysuje punktacje
   def draw_counter
     Gosu.draw_rect(715, 150, 80, 45, Gosu::Color.rgba(100, 100, 255, 50), 15)
     @counter_img.draw(715, 150, HUD)
   end
 
+  # Rysuje okno
   def draw_window(x, y, x1, x2, y1, y2, img, params = {})
     scale = params[:scale] || 1.0
     bg_col = params[:background_color] || Gosu::Color.rgba(0, 0, 0, 100)
@@ -65,6 +71,7 @@ class UI
     img.draw(x, y, @z, scale, scale, img_col)
   end
 
+  # Rysuje slot na powerupa
   def draw_powerup_slot(x, y, img, params = {})
     x1 = x
     x2 = x + @scene.width * 0.05
@@ -74,6 +81,7 @@ class UI
     draw_window(x, y, x1, x2, y1, y2, img, params)
   end
 
+  # Rysuje informacje o przegranej
   def game_over
     @scene.window.cursor = true
     x = 0
@@ -90,12 +98,13 @@ class UI
     @yes_button.draw
   end
 
+  # Ładuje licznik punktów
   def load_counter(time)
     left = format('%.2f', (@scene.frozen - time) / 1000.0)
     @counter_img = Gosu::Image.from_text(left.to_s, 50, align: :center)
   end
 
-  # loads game over buttons
+  # Ładuje przyciski game over(yes/no)
   def load_gm_btns
     @no_button ||= Button.new(
 
@@ -112,6 +121,7 @@ class UI
     end
   end
 
+  # Pokazuje sloty na powerupy.
   def show_powerup_slots
     10.times do |i|
       x = @scene.width * 0.01 + i * @scene.width * 0.07
@@ -124,6 +134,7 @@ class UI
     end
   end
 
+  # Uaktualnia interfejs
   def update(time)
     interval = time - @last_updated
     @last_updated = time
@@ -137,6 +148,7 @@ class UI
     end    
   end
 
+  # Ładuje obrazem z fpsami
   def load_fps_img
     @fps = Gosu.fps
     @fps_img = Gosu::Image.from_text(
@@ -144,6 +156,7 @@ class UI
       align: :center, width: Integer(@scene.width * 0.07))
   end
 
+  # Ładuje obrazek z punktacją
   def load_score_img
     text = format(
       '%010d', @scene.score).insert(7, '-').insert(4, '-').insert(1, '-')
@@ -152,6 +165,7 @@ class UI
       align: :center, width: Integer(@scene.width * 0.13))
   end
 
+  # Rysuje okiekno pauzy.
   def pause_notice
     x1 = @scene.width * 0.05
     x2 = @scene.width * 0.95
@@ -162,6 +176,7 @@ class UI
     draw_window(x, y, x1, x2, y1, y2, @pause_img)
   end
 
+  # Pokazuje liczbe fpsów.
   def show_fps
     x1 = @scene.width * 0.93
     x2 = @scene.width
@@ -172,6 +187,7 @@ class UI
     draw_window(x, y, x1, x2, y1, y2, @fps_img)
   end
 
+  # Pokazuje punktacje.
   def show_score
     x1 = @scene.width * 0.85
     x2 = @scene.width

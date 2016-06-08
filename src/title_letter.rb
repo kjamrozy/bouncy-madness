@@ -7,10 +7,12 @@ class TitleLetter < Letter
     change_color
   end
 
+  # Rysuje literke na scenie.
   def draw
     @img.draw(@x, @y, 2, 1.0, 1.0, @color)
   end
 
+  # Uaktualnia literke.
   def update
     super
     change_color if rand > 0.99
@@ -18,6 +20,7 @@ class TitleLetter < Letter
 
   private
 
+  # Zmienia kolor literki na losowy.
   def change_color
     @color = Gosu::Color.rgb(rand * 255, rand * 255, rand * 255)
   end

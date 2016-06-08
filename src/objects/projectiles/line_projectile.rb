@@ -1,6 +1,6 @@
 require_relative 'projectile'
 
-# Line projectione
+# LineProjectile - dziedziczy po Projectile. Posiada hitbox i prędkość.
 class LineProjectile < Projectile
   def initialize(scene, params = {})
     super(scene, params)
@@ -12,6 +12,7 @@ class LineProjectile < Projectile
     @y = 600 - scene.player.img.height - @tip_img.height
   end
 
+  # Rysuje pocisk na scenie.
   def draw
     @tip_img.draw(@x, @y, @z)
     @top = @y + @tip_img.height
@@ -21,11 +22,13 @@ class LineProjectile < Projectile
     end
   end
 
+  # Ustawia pocisk jako do usunięcia, jeśli jest taka potrzeba.
   def update(interval)
     super(interval)
     @keep = false if @y <= 0
   end
 
+  # Tworzy prostokąt kolizji.
   def cbox
     [@x, @x + 15, @y, 600]
   end

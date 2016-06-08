@@ -1,6 +1,6 @@
 require_relative 'powerup'
 
-# freezes balls for 3 seconds
+# ShieldPowerup - dziedziczy po Powerup. Daje graczowi tarcze, która pozwala mu przyjąć uderzenie kulki. Po uderzeniu kulki tarcza znika.
 class ShieldPowerup < Powerup
   def initialize(scene, params = {})
     super(scene, params)
@@ -9,6 +9,7 @@ class ShieldPowerup < Powerup
     @id = 8
   end
 
+  # Używa powerup na graczu,
   def invoke
     @scene.player.shield = 256
     @scene.player.powerups[@id] = nil

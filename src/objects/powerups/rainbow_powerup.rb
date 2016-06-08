@@ -1,6 +1,6 @@
 require_relative 'powerup'
 
-# freezes balls for 3 seconds
+# RainbowPowerup - dziedziczy po Powerup. Sprawia, że gracz staje się nietykalny, a jego postać zmienia losowo kolory podczas trwania bonusu.
 class RainbowPowerup < Powerup
   def initialize(scene, params = {})
     super(scene, params)
@@ -9,6 +9,7 @@ class RainbowPowerup < Powerup
     @id = 7
   end
 
+  # Używa powerupu
   def invoke
     @scene.player.rainbow = 6000 
     @scene.player.powerups[@id] = nil

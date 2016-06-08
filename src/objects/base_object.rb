@@ -1,11 +1,35 @@
 require_relative '../helpers/object_helper'
 require_relative '../game_constants'
 
-# base object class, not meant to be instantized
+# BaseObject. Podstawowy obiekt, który pojawia się na ekranie. Posiada współrzędne x,y, z, obrazek. Obcina współrzędne jeśli są poza ekranem, 
 class BaseObject
   include ObjectHelper
   include GameConstants
   attr_accessor :keep
+
+  # Rysuje obiekt na scenie
+  def draw
+    @img.draw(@x, @y, @z, @scale, @scale, @color)
+  end
+
+  # Uaktualnia dane obiektu
+  def update(interval)
+    @y = [@max_y, [@min_y, @y + @vy * interval + @a * interval**2 / 2].max].min
+    @vy += @a * interval
+  end
+
+  # Czy dalej trzymać obiekt na scenie.
+  def keep?
+    @keep
+  end
+
+  # Czy usunąć obiekt ze sceny
+  def to_be_destroyed?
+    !keep?
+  end
+
+  protected
+  # Inicjalizacja, pseudo klasa abstrakcyjna, ponieważ konstruktor jest protected.
   def initialize(scene, params = {})
     @scene = scene
 
@@ -25,22 +49,5 @@ class BaseObject
     @max_x = params[:max_x] || @scene.width
 
     @keep = true
-  end
-
-  def draw
-    @img.draw(@x, @y, @z, @scale, @scale, @color)
-  end
-
-  def update(interval)
-    @y = [@max_y, [@min_y, @y + @vy * interval + @a * interval**2 / 2].max].min
-    @vy += @a * interval
-  end
-
-  def keep?
-    @keep
-  end
-
-  def to_be_destroyed?
-    !keep?
   end
 end

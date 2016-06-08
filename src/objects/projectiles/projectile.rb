@@ -1,7 +1,7 @@
 require_relative '../../helpers/object_helper'
 require_relative '../base_object'
 
-# main projectile class, it is not meant to instantiate
+# Projectile - dziedziczy po BaseObject. Posiada bazową prędkość i cooldown. Znika po dotarciu do górnej krawędzi ekranu.
 class Projectile < BaseObject
   include ObjectHelper
   def initialize(scene, params = {})
@@ -10,10 +10,12 @@ class Projectile < BaseObject
     @z = PROJECTILE
   end
 
+  # Uaktualnia wysokość pocisku.
   def update(interval)
     @y = [@y - interval * @vy, 0].max
   end
 
+  # Podaje cooldown do następnego strzału.
   def cooldown
     1000
   end

@@ -1,6 +1,6 @@
 require_relative 'powerup'
 
-# grants whirl weapon
+# WhirlPowerup - dziedziczy po Powerup. Gracz otrzymuje nową broń.
 class WhirlPowerup < Powerup
   def initialize(scene, params = {})
     super(scene, params)
@@ -9,6 +9,7 @@ class WhirlPowerup < Powerup
     @id = 1
   end
 
+  # Ustawia nową broń jako broń główną
   def invoke
     @scene.player.projectile = WhirlProjectile
     @scene.player.powerups[@id] = nil

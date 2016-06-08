@@ -1,3 +1,3 @@
 require_relative 'src/game'
 
-Game.new.show
+Game.instance.show

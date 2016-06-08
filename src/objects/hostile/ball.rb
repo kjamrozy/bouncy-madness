@@ -3,9 +3,11 @@ require_relative '../../helpers/object_helper'
 require_relative '../projectiles/whirl_projectile'
 require_relative '../powerups/powerups'
 
-# ball class
+# Kula. Jej rolą jest odbijanie się w odrębie ekranu. Dotknięcie gracza sprawia, że gracz przegrywa(chyba, ze posiada tarczę lub jest w danym momencie nietykalny).
+# Posiada prędkość, wspórzędne x,y, obrazek oraz kolor. Dziedziczy po BaseObject. Po rozbiciu kuli, istnieje losowa szansa na pozostawienie powerupa.
 class Ball < BaseObject
   include ObjectHelper
+  # inicjuje obiekt
   def initialize(scene, params = {})
     super(scene, params)
     @z = BALL
@@ -23,7 +25,7 @@ class Ball < BaseObject
       Integer(255 * rand), Integer(255 * rand), Integer(255 * rand), 255)
   end
 
-  # current ball splits into two smaller balls
+  # rozbija kule na dwie mniejsze
   def pop
     @scene.score += 1
     @keep = false
@@ -43,6 +45,7 @@ class Ball < BaseObject
     @scene.add_object(random_powerup.new(@scene, x: x, y: y))
   end
 
+  # uaktualnia pozycje i prędkośc kuli
   def update(interval)
     return if @scene.frozen?
     return @keep = false if @y == @min_y
@@ -53,6 +56,7 @@ class Ball < BaseObject
     @vx = -@vx if @x == @max_x || @x == @min_x
   end
 
+  # losuje powerup
   def random_powerup
     [WhirlPowerup, FreezePowerup, ShieldPowerup, RainbowPowerup].sample
   end

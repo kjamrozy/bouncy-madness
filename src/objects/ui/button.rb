@@ -1,12 +1,13 @@
 require_relative '../../game_constants'
 
-# button class
+# Button. Przycisk, posiada pozycje, tekst i akcje, która jest wykonywana po kliknięciu.
 class Button
   include GameConstants
   NORMAL = 0
   HOVER = 1
   DOWN = 2
   UP = 3
+  # Inicjalizacja przycisku
   def initialize(scene, text, x, y, width, height)
     @scene = scene
     @width = width
@@ -22,6 +23,7 @@ class Button
     @text_img = Gosu::Image.from_text(text, height.to_i, width: width, align: :center)
   end
 
+  # Rysuje przycisk na scenie
   def draw
     bg_col =
       if @state == HOVER
@@ -35,10 +37,12 @@ class Button
     @text_img.draw(@x1, @y1, @z, 1.0, 1.0)
   end
 
+  # Dodaje callback na kliknięcie w przycisk.
   def on_click(&block)
     @on_click.push(block)
   end
 
+  # Uaktualnia przycisk
   def update
     x = @scene.window.mouse_x
     y = @scene.window.mouse_y

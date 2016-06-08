@@ -1,6 +1,6 @@
 require_relative 'projectile'
 
-# Whirl projectile class
+# WhirlProjectile - dziedziczy po Projectile. Posiada hitbox, cooldown, prędkość kątową.
 class WhirlProjectile < Projectile
   def initialize(scene, params = {})
     super(scene, params)
@@ -13,6 +13,7 @@ class WhirlProjectile < Projectile
     @y = params[:y] || [scene.height - @img.height - scene.player.img.height, 0].max
   end
 
+  # Rysuje pocisk na scenie.
   def draw
     @img.draw_rot(
       @x + @img.width * 0.5, @y + @img.height * 0.5,

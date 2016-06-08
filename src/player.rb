@@ -4,13 +4,14 @@ require_relative 'helpers/object_helper'
 require_relative 'game_constants'
 require 'gosu'
 
-# player class
+# Obiekt reprezentujący gracza na scenie
 class Player
   include GameConstants
   attr_reader :img, :x, :y, :color
   attr_accessor :mov, :cooldown, :powerups, 
                 :projectile, :powerups, :shield, :rainbow
 
+  # inicjuje gracza
   def initialize(scene, params = {})
     @scene = scene
     # movement variable, -1 for moving to the left,
@@ -37,6 +38,7 @@ class Player
     @y = params[:y] || @scene.height - @img.height
   end
 
+  # rysuje gracza na scenie
   def draw
     if @rainbow > 0
       @rainbow_img.draw(@x, @y, PLAYER, @scale, @scale, Gosu::Color.rgba(@color[0], @color[1], @color[2], 150))
@@ -48,6 +50,7 @@ class Player
     @shield_img.draw(@x + offset, @scene.height - @shield_img.height, PLAYER, @scale, @scale, Gosu::Color.rgba(255, 255, 255, [@shield, 0].max))
   end
 
+  # uaktualnia położenie gracza i inne atrybuty
   def update(interval)
     animate_player(interval) unless @mov == 0
     @mov = 0
@@ -59,7 +62,7 @@ class Player
     @rainbow -= interval if @rainbow > 0
   end
 
-  # computer current character frame
+  # oblicza aktualną klatkę animacji
   def animate_player(interval)
     @elapsed += interval
     @frame += @elapsed / 1000
@@ -68,18 +71,19 @@ class Player
     @img = @imgs[@frame]
   end
 
-  # is cooldown on weapon off
+  # zwraca true jeśli cooldown na broń zszedł
   def cooldown?
     Gosu.milliseconds >= @cooldown
   end
 
+  # strzał
   def shot
     projectile = @projectile.new(@scene)
     @scene.add_object(projectile)
     @cooldown = Gosu.milliseconds + projectile.cooldown
   end
 
-  # collision boxes
+  # zwraca tablicę hitboxów
   def cbox
     boxes = if @shield > 0
         [[33, -6, 25, 6], [26, -4, 7, 4], [21, 0, 48, 5],
@@ -99,6 +103,7 @@ class Player
 
   private
 
+  # pomocnicza funkcja zwracająca hitboxa
   def box_for(x, y, width, height)
     [x, x + width, y,  y + height]
   end

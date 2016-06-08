@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>class WhirlProjectile - RDoc Documentation</title>
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script src="./js/jquery.js"></script>
+<script src="./js/darkfish.js"></script>
+
+<link href="./css/fonts.css" rel="stylesheet">
+<link href="./css/rdoc.css" rel="stylesheet">
+
+
+
+<body id="top" role="document" class="class">
+<nav role="navigation">
+  <div id="project-navigation">
+    <div id="home-section" role="region" title="Quick navigation" class="nav-section">
+  <h2>
+    <a href="./index.html" rel="home">Home</a>
+  </h2>
+
+  <div id="table-of-contents-navigation">
+    <a href="./table_of_contents.html#pages">Pages</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </div>
+</div>
+
+    <div id="search-section" role="search" class="project-section initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <div id="search-field-wrapper">
+      <input id="search-field" role="combobox" aria-label="Search"
+             aria-autocomplete="list" aria-controls="search-results"
+             type="text" name="search" placeholder="Search" spellcheck="false"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </div>
+
+    <ul id="search-results" aria-label="Search Results"
+        aria-busy="false" aria-expanded="false"
+        aria-atomic="false" class="initially-hidden"></ul>
+  </form>
+</div>
+
+  </div>
+
+  
+
+  <div id="class-metadata">
+    
+    <div id="parent-class-section" class="nav-section">
+  <h3>Parent</h3>
+
+  
+  <p class="link"><a href="Projectile.html">Projectile</a>
+  
+</div>
+
+    
+    
+    <!-- Method Quickref -->
+<div id="method-list-section" class="nav-section">
+  <h3>Methods</h3>
+
+  <ul class="link-list" role="directory">
+    
+    <li class="calls-super" ><a href="#method-c-new">::new</a>
+    
+    <li ><a href="#method-i-cbox">#cbox</a>
+    
+    <li ><a href="#method-i-cooldown">#cooldown</a>
+    
+    <li ><a href="#method-i-draw">#draw</a>
+    
+    <li class="calls-super" ><a href="#method-i-update">#update</a>
+    
+  </ul>
+</div>
+
+  </div>
+</nav>
+
+<main role="main" aria-labelledby="class-WhirlProjectile">
+  <h1 id="class-WhirlProjectile" class="class">
+    class WhirlProjectile
+  </h1>
+
+  <section class="description">
+    
+<p><a href="WhirlProjectile.html">WhirlProjectile</a> - dziedziczy po <a
+href="Projectile.html">Projectile</a>. Posiada hitbox, cooldown, prędkość
+kątową.</p>
+
+  </section>
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Class Methods</h3>
+       </header>
+
+    
+      <div id="method-c-new" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">new</span><span
+            class="method-args">(scene, params = {})</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+            <div class="method-calls-super">
+              Calls superclass method
+              <a href="Projectile.html#method-c-new">Projectile.new</a>
+            </div>
+          
+
+          
+          <div class="method-source-code" id="new-source">
+            <pre><span class="ruby-comment"># File src/objects/projectiles/whirl_projectile.rb, line 5</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">scene</span>, <span class="ruby-identifier">params</span> = {})
+  <span class="ruby-keyword">super</span>(<span class="ruby-identifier">scene</span>, <span class="ruby-identifier">params</span>)
+
+  <span class="ruby-ivar">@rot</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:initial_rotation</span>] <span class="ruby-operator">||</span> <span class="ruby-value">0.0</span>
+  <span class="ruby-ivar">@rot_speed</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:rot_speed</span>] <span class="ruby-operator">||</span> <span class="ruby-value">0.002</span>
+
+  <span class="ruby-ivar">@img</span> = <span class="ruby-constant">Gosu</span><span class="ruby-operator">::</span><span class="ruby-constant">Image</span>.<span class="ruby-identifier">new</span>(<span class="ruby-string">&#39;media/images/whirl_projectile.png&#39;</span>)
+  <span class="ruby-ivar">@x</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:x</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">scene</span>.<span class="ruby-identifier">player</span>.<span class="ruby-identifier">img</span>.<span class="ruby-identifier">width</span><span class="ruby-operator">/</span><span class="ruby-value">2</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">scene</span>.<span class="ruby-identifier">player</span>.<span class="ruby-identifier">x</span> <span class="ruby-operator">-</span> <span class="ruby-ivar">@img</span>.<span class="ruby-identifier">width</span><span class="ruby-operator">/</span><span class="ruby-value">2</span>
+  <span class="ruby-ivar">@y</span> = <span class="ruby-identifier">params</span>[<span class="ruby-value">:y</span>] <span class="ruby-operator">||</span> [<span class="ruby-identifier">scene</span>.<span class="ruby-identifier">height</span> <span class="ruby-operator">-</span> <span class="ruby-ivar">@img</span>.<span class="ruby-identifier">height</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">scene</span>.<span class="ruby-identifier">player</span>.<span class="ruby-identifier">img</span>.<span class="ruby-identifier">height</span>, <span class="ruby-value">0</span>].<span class="ruby-identifier">max</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section">
+       <header>
+         <h3>Public Instance Methods</h3>
+       </header>
+
+    
+      <div id="method-i-cbox" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">cbox</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>this projectile should have stricter collision box</p>
+          
+          
+
+          
+          <div class="method-source-code" id="cbox-source">
+            <pre><span class="ruby-comment"># File src/objects/projectiles/whirl_projectile.rb, line 31</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">cbox</span>
+  <span class="ruby-identifier">width</span> = <span class="ruby-constant">Integer</span>(<span class="ruby-ivar">@img</span>.<span class="ruby-identifier">width</span> <span class="ruby-operator">*</span> <span class="ruby-value">0.9</span>)
+  <span class="ruby-identifier">offset</span> = <span class="ruby-constant">Integer</span>(<span class="ruby-ivar">@img</span>.<span class="ruby-identifier">width</span> <span class="ruby-operator">*</span> <span class="ruby-value">0.05</span>)
+  [<span class="ruby-ivar">@x</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">offset</span>, <span class="ruby-ivar">@x</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">offset</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">width</span>, <span class="ruby-ivar">@y</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">offset</span>, <span class="ruby-ivar">@y</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">offset</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">width</span>]
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-cooldown" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">cooldown</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+
+          
+          <div class="method-source-code" id="cooldown-source">
+            <pre><span class="ruby-comment"># File src/objects/projectiles/whirl_projectile.rb, line 37</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">cooldown</span>
+  <span class="ruby-value">200</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-draw" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">draw</span><span
+            class="method-args">()</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Rysuje pocisk na scenie.</p>
+          
+          
+
+          
+          <div class="method-source-code" id="draw-source">
+            <pre><span class="ruby-comment"># File src/objects/projectiles/whirl_projectile.rb, line 17</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">draw</span>
+  <span class="ruby-ivar">@img</span>.<span class="ruby-identifier">draw_rot</span>(
+    <span class="ruby-ivar">@x</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@img</span>.<span class="ruby-identifier">width</span> <span class="ruby-operator">*</span> <span class="ruby-value">0.5</span>, <span class="ruby-ivar">@y</span> <span class="ruby-operator">+</span> <span class="ruby-ivar">@img</span>.<span class="ruby-identifier">height</span> <span class="ruby-operator">*</span> <span class="ruby-value">0.5</span>,
+    <span class="ruby-value">2</span>, <span class="ruby-ivar">@rot</span>, <span class="ruby-value">0.5</span>, <span class="ruby-value">0.5</span>, <span class="ruby-ivar">@scale</span>, <span class="ruby-ivar">@scale</span>)
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+      <div id="method-i-update" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">update</span><span
+            class="method-args">(interval)</span>
+          
+          <span class="method-click-advice">click to toggle source</span>
+          
+        </div>
+        
+
+        <div class="method-description">
+          
+          
+          
+          
+            <div class="method-calls-super">
+              Calls superclass method
+              <a href="Projectile.html#method-i-update">Projectile#update</a>
+            </div>
+          
+
+          
+          <div class="method-source-code" id="update-source">
+            <pre><span class="ruby-comment"># File src/objects/projectiles/whirl_projectile.rb, line 23</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">update</span>(<span class="ruby-identifier">interval</span>)
+  <span class="ruby-keyword">super</span>(<span class="ruby-identifier">interval</span>)
+  <span class="ruby-ivar">@rot</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">interval</span> <span class="ruby-operator">*</span> <span class="ruby-ivar">@rot_speed</span> <span class="ruby-operator">*</span> <span class="ruby-value">360</span>
+  <span class="ruby-ivar">@rot</span> <span class="ruby-operator">-=</span> <span class="ruby-constant">Integer</span>(<span class="ruby-ivar">@rot</span> <span class="ruby-operator">/</span> <span class="ruby-value">360</span>) <span class="ruby-operator">*</span> <span class="ruby-value">360</span>
+  <span class="ruby-ivar">@keep</span> = <span class="ruby-keyword">false</span> <span class="ruby-keyword">if</span> <span class="ruby-ivar">@y</span> <span class="ruby-operator">&lt;=</span> <span class="ruby-value">0</span>
+<span class="ruby-keyword">end</span></pre>
+          </div>
+          
+        </div>
+
+        
+
+        
+      </div>
+
+    
+    </section>
+  
+  </section>
+</main>
+
+
+<footer id="validator-badges" role="contentinfo">
+  <p><a href="http://validator.w3.org/check/referer">Validate</a>
+  <p>Generated by <a href="http://docs.seattlerb.org/rdoc/">RDoc</a> 4.2.2.
+  <p>Based on <a href="http://deveiate.org/projects/Darkfish-RDoc/">Darkfish</a> by <a href="http://deveiate.org">Michael Granger</a>.
+</footer>
+
